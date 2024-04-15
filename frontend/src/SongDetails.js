@@ -25,7 +25,7 @@ export const SongDetails = ({ label }) => {
 
   return (
     <Box sx={{ width: 400, height: 240, position: 'fixed', right: 16, top: '20%' }}>
-      {label ? (
+      {labelToShow ? (
         <Typography
           sx={{
             fontFamily: 'fantasy',
@@ -35,7 +35,7 @@ export const SongDetails = ({ label }) => {
             marginLeft: 'auto',
             whiteSpace: 'pre',
             textAlign: 'center'
-          }}>{`Feeling ${label}? \n here is a song for you...`}</Typography>
+          }}>{`Feeling ${labelToShow}? \n here is a song for you...`}</Typography>
       ) : null}
       <Box
         sx={{
