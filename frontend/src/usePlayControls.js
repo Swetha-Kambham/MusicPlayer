@@ -18,12 +18,16 @@ export const usePlayControls = (label) => {
   const [sound, setSound] = useState(null);
 
   const onPlayClick = useCallback(() => {
-    const id = sound.play();
-    setId(id);
+    if (sound) {
+      const id = sound.play();
+      setId(id);
+    }
   }, [sound]);
 
   const onPauseClick = useCallback(() => {
-    sound.pause(id || undefined);
+    if (sound) {
+      sound.pause(id || undefined);
+    }
   }, [id, sound]);
 
   useEffect(() => {
@@ -32,23 +36,25 @@ export const usePlayControls = (label) => {
         sound.unload();
       }
 
-      const s = new Howl({
-        src: require(`./assets/mp3-songs/${label}/${fetchSong(label)}`),
-        onplay: () => {
-          setIsPlaying(true);
-        },
-        onpause: () => {
-          setIsPlaying(false);
-        },
-        onend: () => {
-          setIsPlaying(false);
-        }
-      });
+      if (label && fetchSong(label)) {
+        const s = new Howl({
+          src: require(`./assets/mp3-songs/${label}/${fetchSong(label)}`),
+          onplay: () => {
+            setIsPlaying(true);
+          },
+          onpause: () => {
+            setIsPlaying(false);
+          },
+          onend: () => {
+            setIsPlaying(false);
+          }
+        });
 
-      const id = s.play();
-      setId(id);
-      setSound(s);
-      setInternalLabel(label);
+        const id = s.play();
+        setId(id);
+        setSound(s);
+        setInternalLabel(label);
+      }
     }
   }, [internalLabel, isPlaying, label, sound]);
 

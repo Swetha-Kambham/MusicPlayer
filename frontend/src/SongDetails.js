@@ -1,4 +1,4 @@
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import background from './images/playingSymbol.gif';
 import PropTypes from 'prop-types';
@@ -24,45 +24,41 @@ export const SongDetails = ({ label }) => {
   const { isPlaying, onPlayClick, onPauseClick, label: labelToShow } = usePlayControls(label);
 
   return (
-    <Grid container spacing={0}>
-      {labelToShow ? (
-        <Grid item xs={12} sx={{ display: 'flex' }}>
-          <Typography
-            sx={{
-              fontFamily: 'fantasy',
-              fontSize: '3rem',
-              fontWeight: 600,
-              color: 'white',
-              marginLeft: 'auto'
-            }}>{`Feeling ${labelToShow}? \n here is a song for you....`}</Typography>
-        </Grid>
-      ) : null}
-      <Grid item xs={12}>
-        <Box
+    <Box sx={{ width: 400, height: 240, position: 'fixed', right: 16, top: '20%' }}>
+      {label ? (
+        <Typography
           sx={{
-            backgroundImage: `url(${background})`,
-            backgroundPosition: 'center',
-            height: '150px',
-            width: '150px',
-            backgroundSize: 'cover',
-            marginLeft: 'auto'
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} sx={{ display: 'flex' }}>
-        <Box
-          sx={{
+            fontFamily: 'fantasy',
+            fontSize: '2rem',
+            fontWeight: 400,
+            color: 'white',
             marginLeft: 'auto',
-            marginBottom: 'auto'
-          }}>
+            whiteSpace: 'pre',
+            textAlign: 'center'
+          }}>{`Feeling ${label}? \n here is a song for you...`}</Typography>
+      ) : null}
+      <Box
+        sx={{
+          display: 'flex'
+        }}>
+        <img
+          src={background}
+          style={{ width: '150px', height: '150px', marginLeft: 'auto', marginRight: 'auto' }}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex'
+        }}>
+        <Box sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
           <PlayPauseButtons
             isPlaying={isPlaying}
             onPlayClick={onPlayClick}
             onPauseClick={onPauseClick}
           />
         </Box>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
 

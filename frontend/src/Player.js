@@ -32,7 +32,7 @@ export const Player = () => {
           backgroundSize: 'cover',
           display: 'flex'
         }}>
-        {capture ? <SongDetails label={label} /> : null}
+        {capture ? <SongDetails label={'sad'} /> : null}
         <Box sx={{ margin: 'auto', marginRight: '100px', position: 'relative' }}>
           {capture ? null : (
             <Button
@@ -51,7 +51,7 @@ export const Player = () => {
       </Box>
       {capture ? (
         <Box sx={{ position: 'absolute', top: 10, left: 10 }}>
-          <Webcam onLabelChange={onLabelChange} />
+          {/* <Webcam onLabelChange={onLabelChange} /> */}
         </Box>
       ) : null}
     </>
