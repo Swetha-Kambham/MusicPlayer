@@ -72,6 +72,8 @@ export const usePlayControls = () => {
           setId(id);
           setSound(s);
           setLabel(newLabel);
+        } else {
+          setLabel(null);
         }
       }
     },

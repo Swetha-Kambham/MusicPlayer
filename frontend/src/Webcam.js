@@ -29,9 +29,7 @@ export const Webcam = ({ onLabelChange }) => {
       if (webcamRef && webcamRef.current) {
         const imageSrc = webcamRef.current.getScreenshot();
         const data = await getEmotionOfImage(imageSrc);
-        if (data && data.label) {
-          onLabelChange(data.label);
-        }
+        onLabelChange(data?.label);
       }
     }, 1000);
     return () => clearInterval(interval);

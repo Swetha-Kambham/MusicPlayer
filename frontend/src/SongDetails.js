@@ -20,18 +20,18 @@ export const SongDetails = () => {
   return (
     <>
       <Box sx={{ width: 400, height: 240, position: 'fixed', right: 16, top: '20%' }}>
-        {label ? (
-          <Typography
-            sx={{
-              fontFamily: 'fantasy',
-              fontSize: '2rem',
-              fontWeight: 400,
-              color: 'white',
-              marginLeft: 'auto',
-              whiteSpace: 'pre',
-              textAlign: 'center'
-            }}>{`Feeling ${label}? \n here is a song for you...`}</Typography>
-        ) : null}
+        <Typography
+          sx={{
+            fontFamily: 'fantasy',
+            fontSize: '2rem',
+            fontWeight: 400,
+            color: 'white',
+            marginLeft: 'auto',
+            whiteSpace: 'pre',
+            textAlign: 'center'
+          }}>
+          {label ? `Feeling ${label}? \n here is a song for you...` : 'No human face detected.'}
+        </Typography>
         <Box
           sx={{
             display: 'flex'
