@@ -34,5 +34,5 @@ python 3.11.x installed
 * virtualenv devenv
 * python -m venv devenv
 * devenv\Scripts\activate(windows) or source ./devenv/bin/activate env(for mac)
-* devenv\Scripts\pip.exe install -r requirements.txt  (for windows) or devenv/bin/pip install -r requirements.txt  (for mac)
+* devenv\Scripts\pip.exe install -r requirements.txt  (for windows) or devenv\bin\pip install -r requirements.txt  (for mac)
 * python3 server.py
