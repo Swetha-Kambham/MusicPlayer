@@ -6,25 +6,26 @@ function HomePage() {
   return (
     <Box
       sx={{
-        padding: '50px', // Padding around the content
-        borderRadius: '10px', // Rounded corners
-        maxWidth: '800px', // Maximum width for content
-        margin: 'auto', // Center align content
-        textAlign: 'center', // Center align text
-        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)', // Shadow effect
-        color: '#ffffff' // Text color (white)
+        padding: '50px',
+        borderRadius: '10px',
+        maxWidth: '800px',
+        margin: 'auto',
+        textAlign: 'center',
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+        color: '#ffffff'
       }}>
       <Typography variant="h3" gutterBottom>
-        Welcome to MoodTunes
+        Welcome to Emotion Based Music Player System
       </Typography>
       <Typography variant="body1" gutterBottom>
-        MoodTunes is your personalized music companion that matches your mood with the perfect song.
-        Whether you&apos;re feeling happy, sad, surprised, or somewhere in between, MoodTunes has a
-        curated playlist just for you.
+        Emotion Based Music Player System is your personalized music companion that matches your
+        mood with the perfect song. Whether you&apos;re feeling happy, sad, surprised, or somewhere
+        in between, Emotion Based Music Player System has a curated playlist just for you.
       </Typography>
       <Typography variant="body1" gutterBottom>
-        Simply select your current mood, and let MoodTunes do the rest. Explore new music,
-        rediscover old favorites, and experience the power of music tailored to your emotions.
+        Simply select your current mood, and let Emotion Based Music Player System do the rest.
+        Explore new music, rediscover old favorites, and experience the power of music tailored to
+        your emotions.
       </Typography>
       <Typography variant="body1">Start your musical journey with MoodTunes today!</Typography>
     </Box>

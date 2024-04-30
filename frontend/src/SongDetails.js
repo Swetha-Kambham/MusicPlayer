@@ -30,7 +30,9 @@ export const SongDetails = () => {
             whiteSpace: 'pre',
             textAlign: 'center'
           }}>
-          {label ? `Feeling ${label}? \n here is a song for you...` : 'No human face detected.'}
+          {label
+            ? `Detected emotion is ${label} \n here is a song for you...`
+            : 'No human face detected.'}
         </Typography>
         <Box
           sx={{
