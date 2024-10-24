@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import background from './images/background.jpg';
-import { SongDetails } from './SongDetails';
+import { SongCard } from './SongCard';
 
 export const Player = () => {
   const [capture, setCapture] = useState(false);
@@ -21,7 +21,7 @@ export const Player = () => {
           backgroundSize: 'cover',
           display: 'flex'
         }}>
-        {capture ? <SongDetails /> : null}
+        {capture ? <SongCard /> : null}
         <Box sx={{ margin: 'auto', marginRight: '100px', position: 'relative' }}>
           {capture ? null : (
             <Button

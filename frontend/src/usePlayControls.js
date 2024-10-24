@@ -1,9 +1,9 @@
 import { useCallback, useState, useMemo, useEffect } from 'react';
-import songList from './mp3s.json';
+import songsMap from './mp3s.json';
 import { Howl } from 'howler';
 
 const fetchSong = (label) => {
-  const items = (label && songList[label]) || [];
+  const items = (label && songsMap[label]) || [];
 
   if (items.length > 0) {
     return items[Math.floor(Math.random() * items.length)];
@@ -21,6 +21,38 @@ export const usePlayControls = () => {
     min: 0,
     sec: 0
   });
+  const [selectedGroup, setSelectedGroup] = useState(Object.keys(songsMap)[0]);
+  const [selectedSong, setSelectedSong] = useState(fetchSong(Object.keys(songsMap)[0]));
+
+  const handleGroupChange = useCallback((event) => {
+    const { value: grp } = event.target || {};
+    if (grp) {
+      setSelectedGroup(event.target.value);
+      setSelectedSong(fetchSong(grp));
+      setIsPlaying(false);
+    }
+  }, []);
+
+  const handleSongSelect = (song) => {
+    setSelectedSong(song);
+    setIsPlaying(true);
+  };
+
+  const handleNext = () => {
+    const songs = songsMap[selectedGroup];
+    const currentIndex = songs.indexOf(selectedSong);
+    if (currentIndex < songs.length - 1) {
+      handleSongSelect(songs[currentIndex + 1]);
+    }
+  };
+
+  const handlePrevious = () => {
+    const songs = songsMap[selectedGroup];
+    const currentIndex = songs.indexOf(selectedSong);
+    if (currentIndex > 0) {
+      handleSongSelect(songs[currentIndex - 1]);
+    }
+  };
 
   const onPlayClick = useCallback(() => {
     if (sound) {
@@ -44,13 +76,16 @@ export const usePlayControls = () => {
   const onLabelChange = useCallback(
     (newLabel) => {
       if (!isPlaying && !isPaused) {
+        setSelectedGroup(newLabel);
         if (sound) {
           sound.unload();
         }
 
         if (newLabel && fetchSong(newLabel)) {
+          const songName = fetchSong(newLabel);
+          setSelectedSong(songName);
           const s = new Howl({
-            src: require('./assets/mp3-songs' + `/${newLabel}/${fetchSong(newLabel)}`),
+            src: require('./assets/mp3-songs' + `/${newLabel}/${songName}`),
             onplay: () => {
               setIsPlaying(true);
               setIsPaused(false);
@@ -122,10 +157,17 @@ export const usePlayControls = () => {
     [id, sound]
   );
 
+  const handlePlayPause = useCallback(() => {
+    if (isPlaying) {
+      onPauseClick();
+    } else {
+      onPlayClick();
+    }
+    setIsPlaying(!isPlaying);
+  }, [isPlaying, onPauseClick, onPlayClick]);
+
   return {
     isPlaying,
-    onPlayClick,
-    onPauseClick,
     onStopClick,
     label,
     onLabelChange,
@@ -133,6 +175,13 @@ export const usePlayControls = () => {
     seconds,
     currTime,
     onSeek,
-    isPaused
+    isPaused,
+    handlePlayPause,
+    handleGroupChange,
+    handleNext,
+    handlePrevious,
+    selectedSong,
+    selectedGroup,
+    handleSongSelect
   };
 };
