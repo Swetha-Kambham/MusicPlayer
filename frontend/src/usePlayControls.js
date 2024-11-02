@@ -16,11 +16,16 @@ export const usePlayControls = () => {
   const [label, setLabel] = useState(null);
   const sound = useRef(null);
   const timeoutRef = useRef(null);
-  const debounceDelay = 1000;
+  const debounceDelay = 100;
   const [playbackTime, setPlaybackTime] = useState(null);
   const [durationInSeconds, setDurationInSeconds] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(Object.keys(songsMap)[0]);
   const [selectedSong, setSelectedSong] = useState(null);
+  const [touched, setTouched] = useState(false);
+
+  const handleGroupDropdownOpen = useCallback(() => {
+    setTouched(true);
+  }, []);
 
   const unloadSound = useCallback(() => {
     if (sound.current) {
@@ -58,6 +63,7 @@ export const usePlayControls = () => {
         onend: () => {
           setIsPlaying(false);
           setIsPaused(false);
+          setTouched(false);
         },
         onstop: () => {
           setIsPlaying(false);
@@ -89,6 +95,7 @@ export const usePlayControls = () => {
     (event) => {
       const { value: grp } = event.target || {};
       if (grp) {
+        setTouched(true);
         unloadSound();
         setLabel(null);
         setSelectedGroup(grp);
@@ -103,6 +110,7 @@ export const usePlayControls = () => {
 
   const handleSongSelect = useCallback(
     (song) => () => {
+      setTouched(true);
       unloadSound();
       setSelectedSong(song);
       setPlaybackTime(null);
@@ -113,6 +121,7 @@ export const usePlayControls = () => {
   );
 
   const handleNext = useCallback(() => {
+    setTouched(true);
     const songs = songsMap[selectedGroup];
     if (songs.length > 0) {
       const currentIndex = songs.indexOf(selectedSong);
@@ -121,6 +130,7 @@ export const usePlayControls = () => {
   }, [handleSongSelect, selectedGroup, selectedSong]);
 
   const handlePrevious = useCallback(() => {
+    setTouched(true);
     const songs = songsMap[selectedGroup];
     if (songs.length > 0) {
       const currentIndex = songs.indexOf(selectedSong);
@@ -129,12 +139,14 @@ export const usePlayControls = () => {
   }, [handleSongSelect, selectedGroup, selectedSong]);
 
   const onPlayClick = useCallback(() => {
+    setTouched(true);
     if (sound.current) {
       sound.current.play();
     }
   }, [sound]);
 
   const onPauseClick = useCallback(() => {
+    setTouched(true);
     if (sound.current) {
       sound.current.pause();
     }
@@ -148,7 +160,7 @@ export const usePlayControls = () => {
 
   const onLabelChange = useCallback(
     (newLabel) => {
-      if (!isPlaying && !isPaused) {
+      if (!touched && !isPlaying && !isPaused) {
         if (newLabel && Object.hasOwn(songsMap, newLabel)) {
           setSelectedGroup(newLabel);
           setLabel(newLabel);
@@ -162,7 +174,7 @@ export const usePlayControls = () => {
         }
       }
     },
-    [isPaused, isPlaying, debouncedPlayNewSong]
+    [touched, isPlaying, isPaused]
   );
 
   useEffect(() => {
@@ -203,6 +215,7 @@ export const usePlayControls = () => {
     isPaused,
     handlePlayPause,
     handleGroupChange,
+    handleGroupDropdownOpen,
     handleNext,
     handlePrevious,
     selectedSong,

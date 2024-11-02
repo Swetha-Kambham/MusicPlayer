@@ -29,6 +29,7 @@ export const SongCard = () => {
     selectedGroup,
     handlePlayPause,
     handleGroupChange,
+    handleGroupDropdownOpen,
     handleNext,
     handlePrevious,
     handleSongSelect,
@@ -37,7 +38,7 @@ export const SongCard = () => {
 
   return (
     <>
-      <Box sx={{ padding: 2, height: '80vh', position: 'fixed', right: 16, top: '6%' }}>
+      <Box sx={{ padding: 2, height: '75vh', position: 'fixed', right: 16, top: '5%' }}>
         {label ? (
           <Typography
             sx={{
@@ -67,6 +68,7 @@ export const SongCard = () => {
             <Select
               value={selectedGroup}
               onChange={handleGroupChange}
+              onOpen={handleGroupDropdownOpen}
               sx={{
                 color: 'white',
                 '&:before': {
@@ -106,6 +108,9 @@ export const SongCard = () => {
                 </ListItemButton>
               ))}
             </List>
+            {songsMap[selectedGroup].length === 0 ? (
+              <ListItemText primary="No song found for the mood...." sx={{ fontSize: '0.75rem' }} />
+            ) : null}
           </Box>
           <Divider variant="fullWidth" sx={{ backgroundColor: 'white' }} />
           {selectedSong ? (
