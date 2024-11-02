@@ -5,7 +5,7 @@ import {
   Select,
   MenuItem,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   FormControl,
   InputLabel,
@@ -16,11 +16,15 @@ import PlayerControls from './PlayerControls';
 import { usePlayControls } from './usePlayControls';
 import Webcam from './Webcam';
 import songsMap from './mp3s.json';
+import { SongTimeDetails } from './SongTimeDetails';
 
 export const SongCard = () => {
   const {
     label,
     onLabelChange,
+    durationInSeconds,
+    playbackTime,
+    onSeek,
     selectedSong,
     selectedGroup,
     handlePlayPause,
@@ -89,36 +93,43 @@ export const SongCard = () => {
           <Box sx={{ flex: '1 1 auto', overflowY: 'auto' }}>
             <List>
               {songsMap[selectedGroup].map((song) => (
-                <ListItem
+                <ListItemButton
                   key={song}
-                  button
                   selected={selectedSong === song}
-                  onClick={() => handleSongSelect(song)}
+                  onClick={handleSongSelect(song)}
                   sx={{
                     backgroundColor:
                       selectedSong === song ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
                     color: isPlaying && selectedSong === song ? 'yellow' : 'white'
                   }}>
                   <ListItemText primary={song} sx={{ fontSize: '0.75rem' }} />
-                </ListItem>
+                </ListItemButton>
               ))}
             </List>
           </Box>
           <Divider variant="fullWidth" sx={{ backgroundColor: 'white' }} />
-          {selectedSong && (
+          {selectedSong ? (
             <Typography variant="h6" sx={{ color: 'white', textAlign: 'center', marginTop: 2 }}>
               Now Playing: {selectedSong}
             </Typography>
-          )}
-
-          <Box sx={{ marginTop: 'auto', backgroundColor: 'transparent' }}>
-            <PlayerControls
-              onPlayPause={handlePlayPause}
-              onNext={handleNext}
-              onPrevious={handlePrevious}
-              isPlaying={isPlaying}
+          ) : null}
+          {selectedSong ? (
+            <SongTimeDetails
+              durationInSeconds={durationInSeconds}
+              playbackTime={playbackTime}
+              onSeek={onSeek}
             />
-          </Box>
+          ) : null}
+          {selectedSong ? (
+            <Box sx={{ marginTop: 'auto', backgroundColor: 'transparent' }}>
+              <PlayerControls
+                onPlayPause={handlePlayPause}
+                onNext={handleNext}
+                onPrevious={handlePrevious}
+                isPlaying={isPlaying}
+              />
+            </Box>
+          ) : null}
         </Card>
       </Box>
       <Box sx={{ position: 'absolute', top: 10, left: 10 }}>

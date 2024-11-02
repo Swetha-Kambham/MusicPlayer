@@ -31,7 +31,7 @@ export const Webcam = ({ onLabelChange }) => {
         const data = await getEmotionOfImage(imageSrc);
         onLabelChange(data?.label);
       }
-    }, 1000);
+    }, 2000);
     return () => clearInterval(interval);
   }, [onLabelChange]);
 
