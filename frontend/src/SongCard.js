@@ -37,7 +37,7 @@ export const SongCard = () => {
 
   return (
     <>
-      <Box sx={{ padding: 2, height: '60vh', position: 'fixed', right: 16, top: '10%' }}>
+      <Box sx={{ padding: 2, height: '80vh', position: 'fixed', right: 16, top: '6%' }}>
         {label ? (
           <Typography
             sx={{
@@ -109,7 +109,7 @@ export const SongCard = () => {
           </Box>
           <Divider variant="fullWidth" sx={{ backgroundColor: 'white' }} />
           {selectedSong ? (
-            <Typography variant="h6" sx={{ color: 'white', textAlign: 'center', marginTop: 2 }}>
+            <Typography variant="body2" sx={{ color: 'white', textAlign: 'center', marginY: 2 }}>
               Now Playing: {selectedSong}
             </Typography>
           ) : null}

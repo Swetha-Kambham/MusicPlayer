@@ -18,15 +18,10 @@ export const SongTimeDetails = ({ durationInSeconds, playbackTime, onSeek }) => 
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="body1">{formatTime(playbackTime)}</Typography>
-        <Typography variant="body1">{formatTime(durationInSeconds)}</Typography>
+        <Typography variant="caption">{formatTime(playbackTime)}</Typography>
+        <Typography variant="caption">{formatTime(durationInSeconds)}</Typography>
       </Box>
-      <Slider
-        value={playbackTime}
-        onChange={handleSliderChange}
-        max={durationInSeconds}
-        sx={{ marginY: 2 }}
-      />
+      <Slider value={playbackTime} onChange={handleSliderChange} max={durationInSeconds} />
     </Box>
   );
 };
