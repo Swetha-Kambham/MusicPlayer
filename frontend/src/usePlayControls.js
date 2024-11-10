@@ -15,8 +15,7 @@ export const usePlayControls = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [label, setLabel] = useState(null);
   const sound = useRef(null);
-  const timeoutRef = useRef(null);
-  const debounceDelay = 100;
+  const soundLoadingInProgress = useRef();
   const [playbackTime, setPlaybackTime] = useState(null);
   const [durationInSeconds, setDurationInSeconds] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(Object.keys(songsMap)[0]);
@@ -37,59 +36,48 @@ export const usePlayControls = () => {
 
   const playNewSong = useCallback(
     (grp, songName) => {
-      let s;
+      if (!soundLoadingInProgress.current) {
+        let s;
 
-      unloadSound();
+        unloadSound();
 
-      s = new Howl({
-        src: require('./assets/mp3-songs' + `/${grp}/${songName}`),
-        onload: function () {
-          setDurationInSeconds(s.duration());
-          s.play();
-          setIsPlaying(true);
-          sound.current = s;
-        },
-        onloaderror: function (id, error) {
-          console.error('Failed to load audio:', error);
-        },
-        onplay: () => {
-          setIsPlaying(true);
-          setIsPaused(false);
-        },
-        onpause: () => {
-          setIsPlaying(false);
-          setIsPaused(true);
-        },
-        onend: () => {
-          setIsPlaying(false);
-          setIsPaused(false);
-          setTouched(false);
-        },
-        onstop: () => {
-          setIsPlaying(false);
-          setIsPaused(false);
-        }
-      });
+        soundLoadingInProgress.current = true;
+
+        s = new Howl({
+          src: require('./assets/mp3-songs' + `/${grp}/${songName}`),
+          onload: function () {
+            setDurationInSeconds(s.duration());
+            s.play();
+            setIsPlaying(true);
+            sound.current = s;
+            soundLoadingInProgress.current = false;
+          },
+          onloaderror: function (id, error) {
+            console.error('Failed to load audio:', error);
+            soundLoadingInProgress.current = false;
+          },
+          onplay: () => {
+            setIsPlaying(true);
+            setIsPaused(false);
+          },
+          onpause: () => {
+            setIsPlaying(false);
+            setIsPaused(true);
+          },
+          onend: () => {
+            setIsPlaying(false);
+            setIsPaused(false);
+            setTouched(false);
+          },
+          onstop: () => {
+            setIsPlaying(false);
+            setIsPaused(false);
+          }
+        });
+      }
     },
     [unloadSound]
   );
-
-  const debouncedPlayNewSong = useRef(() => {});
-
-  useEffect(() => {
-    debouncedPlayNewSong.current = (grp, songName) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      timeoutRef.current = setTimeout(() => {
-        playNewSong(grp, songName);
-      }, debounceDelay);
-    };
-
-    return () => {
-      clearTimeout(timeoutRef.current);
-    };
-  }, [playNewSong]);
 
   const handleGroupChange = useCallback(
     (event) => {
@@ -115,9 +103,9 @@ export const usePlayControls = () => {
       setSelectedSong(song);
       setPlaybackTime(null);
       setDurationInSeconds(null);
-      debouncedPlayNewSong.current(selectedGroup, song);
+      playNewSong(selectedGroup, song);
     },
-    [debouncedPlayNewSong, selectedGroup, unloadSound]
+    [playNewSong, selectedGroup, unloadSound]
   );
 
   const handleNext = useCallback(() => {
@@ -169,12 +157,12 @@ export const usePlayControls = () => {
 
           if (songName) {
             setSelectedSong(songName);
-            debouncedPlayNewSong.current(newLabel, songName);
+            playNewSong(newLabel, songName);
           }
         }
       }
     },
-    [touched, isPlaying, isPaused]
+    [touched, isPlaying, isPaused, playNewSong]
   );
 
   useEffect(() => {

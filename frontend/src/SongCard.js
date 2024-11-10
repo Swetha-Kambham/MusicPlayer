@@ -100,6 +100,7 @@ export const SongCard = () => {
                   selected={selectedSong === song}
                   onClick={handleSongSelect(song)}
                   sx={{
+                    overflowWrap: 'anywhere',
                     backgroundColor:
                       selectedSong === song ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
                     color: isPlaying && selectedSong === song ? 'yellow' : 'white'
