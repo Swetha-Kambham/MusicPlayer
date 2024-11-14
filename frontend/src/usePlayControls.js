@@ -1,9 +1,9 @@
-import { useCallback, useState, useEffect, useRef } from 'react';
-import songsMap from './mp3s.json';
+import { useCallback, useState, useEffect } from 'react';
+import songList from './mp3s.json';
 import { Howl } from 'howler';
 
 const fetchSong = (label) => {
-  const items = (label && songsMap[label]) || [];
+  const items = (label && songList[label]) || [];
 
   if (items.length > 0) {
     return items[Math.floor(Math.random() * items.length)];
@@ -11,204 +11,98 @@ const fetchSong = (label) => {
 };
 
 export const usePlayControls = () => {
+  const [id, setId] = useState(undefined);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [label, setLabel] = useState(null);
-  const sound = useRef(null);
-  const soundLoadingInProgress = useRef();
-  const [playbackTime, setPlaybackTime] = useState(null);
-  const [durationInSeconds, setDurationInSeconds] = useState(null);
-  const [selectedGroup, setSelectedGroup] = useState(Object.keys(songsMap)[0]);
-  const [selectedSong, setSelectedSong] = useState(null);
-  const [touched, setTouched] = useState(false);
-
-  const handleGroupDropdownOpen = useCallback(() => {
-    setTouched(true);
-  }, []);
-
-  const unloadSound = useCallback(() => {
-    if (sound.current) {
-      sound.current.stop();
-      sound.current.unload();
-      sound.current = null;
-    }
-  }, []);
-
-  const playNewSong = useCallback(
-    (grp, songName) => {
-      if (!soundLoadingInProgress.current) {
-        let s;
-
-        unloadSound();
-
-        soundLoadingInProgress.current = true;
-
-        s = new Howl({
-          src: require('./assets/mp3-songs' + `/${grp}/${songName}`),
-          onload: function () {
-            setDurationInSeconds(s.duration());
-            s.play();
-            setIsPlaying(true);
-            sound.current = s;
-            soundLoadingInProgress.current = false;
-          },
-          onloaderror: function (id, error) {
-            console.error('Failed to load audio:', error);
-            soundLoadingInProgress.current = false;
-          },
-          onplay: () => {
-            setIsPlaying(true);
-            setIsPaused(false);
-          },
-          onpause: () => {
-            setIsPlaying(false);
-            setIsPaused(true);
-          },
-          onend: () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-            setTouched(false);
-          },
-          onstop: () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-          }
-        });
-      }
-    },
-    [unloadSound]
-  );
-
-  const handleGroupChange = useCallback(
-    (event) => {
-      const { value: grp } = event.target || {};
-      if (grp) {
-        setTouched(true);
-        unloadSound();
-        setLabel(null);
-        setSelectedGroup(grp);
-        setSelectedSong(null);
-        setIsPlaying(false);
-        setPlaybackTime(null);
-        setDurationInSeconds(null);
-      }
-    },
-    [unloadSound]
-  );
-
-  const handleSongSelect = useCallback(
-    (song) => () => {
-      setTouched(true);
-      unloadSound();
-      setSelectedSong(song);
-      setPlaybackTime(null);
-      setDurationInSeconds(null);
-      playNewSong(selectedGroup, song);
-    },
-    [playNewSong, selectedGroup, unloadSound]
-  );
-
-  const handleNext = useCallback(() => {
-    setTouched(true);
-    const songs = songsMap[selectedGroup];
-    if (songs.length > 0) {
-      const currentIndex = songs.indexOf(selectedSong);
-      handleSongSelect(songs[(currentIndex + 1) % songs.length])();
-    }
-  }, [handleSongSelect, selectedGroup, selectedSong]);
-
-  const handlePrevious = useCallback(() => {
-    setTouched(true);
-    const songs = songsMap[selectedGroup];
-    if (songs.length > 0) {
-      const currentIndex = songs.indexOf(selectedSong);
-      handleSongSelect(songs[(currentIndex + songs.length - 1) % songs.length])();
-    }
-  }, [handleSongSelect, selectedGroup, selectedSong]);
+  const [sound, setSound] = useState(null);
+  const [currTime, setCurrTime] = useState({
+    min: 0,
+    sec: 0
+  });
 
   const onPlayClick = useCallback(() => {
-    setTouched(true);
-    if (sound.current) {
-      sound.current.play();
+    if (sound) {
+      const id = sound.play();
+      setId(id);
     }
   }, [sound]);
 
   const onPauseClick = useCallback(() => {
-    setTouched(true);
-    if (sound.current) {
-      sound.current.pause();
+    if (sound) {
+      sound.pause(id || undefined);
     }
-  }, [sound]);
+  }, [id, sound]);
 
   const onStopClick = useCallback(() => {
-    if (sound.current) {
-      sound.current.stop();
+    if (sound) {
+      sound.stop(id || undefined);
     }
-  }, [sound]);
+  }, [id, sound]);
 
   const onLabelChange = useCallback(
     (newLabel) => {
-      if (!touched && !isPlaying && !isPaused) {
-        if (newLabel && Object.hasOwn(songsMap, newLabel)) {
-          setSelectedGroup(newLabel);
+      if (!isPlaying && !isPaused) {
+        if (sound) {
+          sound.unload();
+        }
+
+        if (newLabel && fetchSong(newLabel)) {
+          const s = new Howl({
+            src: require('./assets/mp3-songs' + `/${newLabel}/${fetchSong(newLabel)}`),
+            onplay: () => {
+              setIsPlaying(true);
+              setIsPaused(false);
+            },
+            onpause: () => {
+              setIsPlaying(false);
+              setIsPaused(true);
+            },
+            onend: () => {
+              setIsPlaying(false);
+              setIsPaused(false);
+            },
+            onstop: () => {
+              setIsPlaying(false);
+              setIsPaused(false);
+            }
+          });
+
+          const id = s.play();
+          setId(id);
+          setSound(s);
           setLabel(newLabel);
-
-          const songName = fetchSong(newLabel);
-
-          if (songName) {
-            setSelectedSong(songName);
-            playNewSong(newLabel, songName);
-          }
+        } else {
+          setLabel(null);
         }
       }
     },
-    [touched, isPlaying, isPaused, playNewSong]
+    [isPaused, isPlaying, sound]
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (sound.current && isPlaying) {
-        setPlaybackTime(sound.current.seek());
+      if (sound && id) {
+        const min = Math.floor(sound.seek(id) / 60);
+        const sec = Math.floor(sound.seek(id) % 60);
+
+        setCurrTime({
+          min,
+          sec
+        });
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [isPlaying, sound]);
-
-  const onSeek = useCallback(
-    (value) => {
-      if (sound.current && !isNaN(value)) {
-        sound.current.seek(value);
-        setPlaybackTime(value);
-      }
-    },
-    [sound]
-  );
-
-  const handlePlayPause = useCallback(() => {
-    if (isPlaying) {
-      onPauseClick();
-    } else {
-      onPlayClick();
-    }
-  }, [isPlaying, onPauseClick, onPlayClick]);
+  }, [sound, id]);
 
   return {
     isPlaying,
+    onPlayClick,
+    onPauseClick,
     onStopClick,
     label,
     onLabelChange,
-    durationInSeconds,
-    playbackTime,
-    onSeek,
-    isPaused,
-    handlePlayPause,
-    handleGroupChange,
-    handleGroupDropdownOpen,
-    handleNext,
-    handlePrevious,
-    selectedSong,
-    selectedGroup,
-    handleSongSelect,
-    touched
+    currTime,
+    isPaused
   };
 };
