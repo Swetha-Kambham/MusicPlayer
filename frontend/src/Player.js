@@ -1,9 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import background from './images/background.jpg';
-import { SongDetails } from './SongDetails';
-import HomePage from './HomePage';
-import backgroundImage from './images/background-image.jpg';
+import { SongCard } from './SongCard';
 
 export const Player = () => {
   const [capture, setCapture] = useState(false);
@@ -16,34 +14,27 @@ export const Player = () => {
     <>
       <Box
         sx={{
-          backgroundImage: capture ? `url(${background})` : `url(${backgroundImage})`,
+          backgroundImage: `url(${background})`,
           backgroundPosition: 'center',
           height: '100vh',
           width: '100vw',
           backgroundSize: 'cover',
           display: 'flex'
         }}>
-        {capture ? <SongDetails /> : null}
-        <Box sx={{ margin: 'auto' }}>
+        {capture ? <SongCard /> : null}
+        <Box sx={{ margin: 'auto', marginRight: '100px', position: 'relative' }}>
           {capture ? null : (
-            <>
-              <HomePage />
-              <Box sx={{ textAlign: 'center' }}>
-                <Button
-                  onClick={onStartCaptureclick}
-                  variant="contained"
-                  sx={{
-                    background: 'green',
-                    color: 'white',
-                    fontSize: '1.5rem',
-                    fontFamily: 'fantasy',
-                    marginTop: '20px',
-                    variant: 'contained'
-                  }}>
-                  Let&apos;s Go
-                </Button>
-              </Box>
-            </>
+            <Button
+              onClick={onStartCaptureclick}
+              variant="contained"
+              sx={{
+                background: 'green',
+                color: 'white',
+                fontSize: '1.5rem',
+                fontFamily: 'fantasy'
+              }}>
+              Let&apos;s Go
+            </Button>
           )}
         </Box>
       </Box>
