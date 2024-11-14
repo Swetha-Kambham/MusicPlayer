@@ -33,13 +33,21 @@ export const SongCard = () => {
     handleNext,
     handlePrevious,
     handleSongSelect,
-    isPlaying
+    isPlaying,
+    touched
   } = usePlayControls();
-
   return (
     <>
-      <Box sx={{ padding: 2, height: '75vh', position: 'fixed', right: 16, top: '5%' }}>
-        {label ? (
+      <Box
+        sx={{
+          padding: 2,
+          height: '75vh',
+          position: 'fixed',
+          right: 16,
+          top: '5%',
+          boxShadow: '5px 5px 15px green, inset 6px 6px 12px green'
+        }}>
+        {!touched ? (
           <Typography
             sx={{
               fontFamily: 'fantasy',
@@ -49,16 +57,18 @@ export const SongCard = () => {
               marginLeft: 'auto',
               whiteSpace: 'pre',
               textAlign: 'left'
-            }}>{`Feeling ${label}? \nhere is a song for you...`}</Typography>
+            }}>
+            {label ? `Feeling ${label}? \nhere is a song for you...` : `No Emotion detected`}
+          </Typography>
         ) : null}
-        {label ? (
+        {!touched ? (
           <Divider variant="fullWidth" sx={{ backgroundColor: 'white', marginBottom: '24px' }} />
         ) : null}
         <Card
           sx={{
             backgroundColor: 'transparent',
             color: 'white',
-            height: '100%',
+            height: touched ? '100%' : '80%',
             display: 'flex',
             flexDirection: 'column',
             width: '320px'

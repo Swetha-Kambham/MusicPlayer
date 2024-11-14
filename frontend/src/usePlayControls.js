@@ -208,6 +208,7 @@ export const usePlayControls = () => {
     handlePrevious,
     selectedSong,
     selectedGroup,
-    handleSongSelect
+    handleSongSelect,
+    touched
   };
 };

@@ -16,7 +16,7 @@ export const SongTimeDetails = ({ durationInSeconds, playbackTime, onSeek }) => 
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '90%', marginX: 'auto' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="caption">{formatTime(playbackTime)}</Typography>
         <Typography variant="caption">{formatTime(durationInSeconds)}</Typography>
