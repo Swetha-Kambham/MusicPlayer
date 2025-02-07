@@ -18,7 +18,7 @@ def get_emotion_predictions_from_base64_image(base64_string):
         pass
     labels=[]
     faces = face_cascade.detectMultiScale(face_img, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
+    print(len(faces))
     for (x, y, w, h) in faces:
         # Extract the face ROI (Region of Interest)
         face_roi = face_img[y:y + h, x:x + w]
@@ -26,9 +26,9 @@ def get_emotion_predictions_from_base64_image(base64_string):
         
         # Perform emotion analysis on the face ROI
         result = DeepFace.analyze(face_roi, actions=['emotion'], enforce_detection=False)
-
+        print(result)
         # Determine the dominant emotion
-        emotion = result[0]['dominant_emotion']
-        labels.append(emotion)
+        emotionlabel = result[0]['dominant_emotion']
+        labels.append({'label': emotionlabel, 'percentage': result[0]['emotion'][emotionlabel]})
     return labels
 
