@@ -36,11 +36,8 @@ class MyServer(CGIHTTPRequestHandler):
         result = get_emotion_predictions_from_base64_image(base64String)
         if result is None or len(result)==0:
             return self.wfile.write(bytes('{}', "utf8"))
-        #freq_dict = {label: result.count(label) for label in set(result)}
         highest_percentage = [item for item in result if item['percentage'] == max(d['percentage'] for d in result)]
         most_frequent_emotion = max(set(d['label'] for d in result), key=lambda e: sum(1 for d in result if d['label'] == e))
-        print(highest_percentage, most_frequent_emotion)
-        #most_frequent, _ = max(freq_dict.items(), key=lambda x: x[1])
         data = {}
         data['label'] = highest_percentage[0]['label']
         response = json.dumps(data)

@@ -7,7 +7,6 @@ from deepface import DeepFace
 # Load face cascade classifier
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-
 def get_emotion_predictions_from_base64_image(base64_string):
     encoded_data = base64_string.split(',')[1]
     nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
@@ -23,7 +22,6 @@ def get_emotion_predictions_from_base64_image(base64_string):
         face_roi = face_img[y:y + h, x:x + w]
         # Perform emotion analysis on the face ROI
         result = DeepFace.analyze(face_roi, actions=['emotion'], enforce_detection=False)
-        print(result)
         # Determine the dominant emotion
         emotionlabel = result[0]['dominant_emotion']
         labels.append({'label': emotionlabel, 'percentage': result[0]['emotion'][emotionlabel]})

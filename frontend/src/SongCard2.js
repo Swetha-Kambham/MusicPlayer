@@ -16,7 +16,6 @@ import {
 import PlayerControls from './PlayerControls';
 import { usePlayControls } from './usePlayControls2';
 import Webcam from './Webcam';
-//import songsMap from './mp3s.json';
 import { SongTimeDetails } from './SongTimeDetails';
 import { useFetchSongs } from './useFetchSongs';
 

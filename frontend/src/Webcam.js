@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import Webcamera from 'react-webcam';
 import PropTypes from 'prop-types';
-// import mp3s from './mp3s.json';
 
 //const serverBaseURL = `https://${window.location.host}/server`;
 const serverBaseURL = `http://localhost:8080`;

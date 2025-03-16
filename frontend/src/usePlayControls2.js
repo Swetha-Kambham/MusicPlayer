@@ -1,5 +1,4 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
-//import songsMap from './mp3s.json';
 import { Howl } from 'howler';
 
 const fetchSong = (songs) => {
