@@ -1,0 +1,23 @@
+  {
+    "compilerOptions": {
+      "allowSyntheticDefaultImports": true,
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
+      "target": "ES2022",
+      "lib": ["ES2023"],
+      "baseUrl": ".",
+      "allowJs": false,
+      "moduleResolution": "node",
+      "module": "CommonJS",
+      "strict": true,
+      "outDir": "./dist",
+      "sourceMap": true,
+      "incremental": true,
+      "skipLibCheck": true,
+      "paths": {
+        "~/*": ["./src/*"]
+      }
+    },
+    "include": ["./src/**/*.ts"],
+    "exclude": ["node_modules/**/*"]
+  }

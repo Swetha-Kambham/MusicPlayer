@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import background from './images/background.jpg';
-import { SongCard } from './SongCard';
+import { SongCard } from './SongCard2';
 
 export const Player = () => {
   const [capture, setCapture] = useState(false);
