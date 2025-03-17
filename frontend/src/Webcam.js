@@ -3,7 +3,7 @@ import Webcamera from 'react-webcam';
 import PropTypes from 'prop-types';
 
 //const serverBaseURL = `https://${window.location.host}/server`;
-const serverBaseURL = `http://localhost:8080`;
+const serverBaseURL = `http://localhost:8080/predict`;
 
 const getEmotionOfImage = async (base64) =>
   fetch(serverBaseURL, {
