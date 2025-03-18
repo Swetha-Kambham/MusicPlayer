@@ -9,19 +9,6 @@ prerequisite
 # Steps to run frontend:
 
 * npm install
-* put your audio files in below directories -
-
-   * src/assets/mp3-songs/happy
-   * src/assets/mp3-songs/sad
-   * src/assets/mp3-songs/anger
-   * src/assets/mp3-songs/fear
-   * src/assets/mp3-songs/surprise
-   * src/assets/mp3-songs/neutral
-     
-  supported audio formats are -
-   "mp3", "mpeg", "opus", "ogg", "oga", "wav", "aac", "caf", "m4a", "m4b", "mp4", "weba", "webm", "dolby", "flac".
-
-* npm run sync-audio
 * npm start
 
 # Steps to run backend:
