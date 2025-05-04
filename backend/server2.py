@@ -98,7 +98,7 @@ class MyServer(CGIHTTPRequestHandler):
         try:
             params = {
                 'Bucket': BUCKETNAME,
-                'Prefix': f'{label}/',  # This filters objects that start with 'label/' (e.g., "rock/")
+                'Prefix': f'{label}/',
                 'MaxKeys': limit
             }
             if next_token:
